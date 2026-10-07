@@ -1,0 +1,56 @@
+name: kika-whatsapp
+
+services:
+  api:
+    image: kika-whatsapp-api:production-20260920.1
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - path: /etc/kika-whatsapp/production.env
+        required: true
+        format: raw
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: "5090"
+      AllowedHosts: api.kikamagalhaes.com.br;localhost;127.0.0.1
+      ReverseProxy__KnownProxy: 172.16.9.1
+      Logging__LogLevel__Microsoft.AspNetCore: Warning
+    expose:
+      - "5090"
+    networks:
+      - backend
+    labels:
+      traefik.enable: "false"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--output", "/dev/null", "--max-time", "3", "http://127.0.0.1:5090/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    cpus: "1.0"
+    mem_limit: 512m
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  backend:
+    name: kika-whatsapp_backend
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.16.9.0/24
+          gateway: 172.16.9.1

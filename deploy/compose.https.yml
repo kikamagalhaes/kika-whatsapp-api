@@ -1,0 +1,13 @@
+# Activate only after public DNS resolves to this VPS and internal checks pass.
+services:
+  api:
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: kika-whatsapp_backend
+      traefik.http.routers.kika-whatsapp-api.rule: Host(`api.kikamagalhaes.com.br`)
+      traefik.http.routers.kika-whatsapp-api.entrypoints: websecure
+      traefik.http.routers.kika-whatsapp-api.service: kika-whatsapp-api
+      traefik.http.routers.kika-whatsapp-api.tls: "true"
+      traefik.http.routers.kika-whatsapp-api.tls.certresolver: letsencrypt
+      traefik.http.services.kika-whatsapp-api.loadbalancer.server.port: "5090"
+      traefik.http.services.kika-whatsapp-api.loadbalancer.server.scheme: http

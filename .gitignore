@@ -1,0 +1,18 @@
+bin/
+obj/
+publish/
+
+.env
+.env.*
+*.env
+
+appsettings.Production.local.json
+
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+# Relatorio operacional com detalhes de infraestrutura (manter local)
+deploy/STATUS.md

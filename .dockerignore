@@ -1,0 +1,10 @@
+# Only source files enter the build context; no secrets or development settings.
+**
+!Dockerfile
+!Kika.WhatsAppAutomation.Api.csproj
+!Program.cs
+!appsettings.json
+!Controllers/
+!Controllers/**
+!Options/
+!Options/**
